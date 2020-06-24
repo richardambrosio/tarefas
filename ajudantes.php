@@ -94,15 +94,14 @@ function tratar_anexo($anexo)
 
 function enviar_email($tarefa, $anexos = [])
 {
-    require "bibliotecas/vendor/autoload.php";
+    require "bibliotecas/PHPMailer/PHPMailerAutoload.php";
     
-
     $corpo = preparar_corpo_email($tarefa, $anexos);
 
     $email = new PHPMailer();
 
     $email->isSMTP();
-    $email->Host = 'smtp.google.com';
+    $email->Host = 'smtp.gmail.com';
     $email->Port = 587;
     $email->SMTPSecure = 'tls';
     $email->SMTPAuth = true;
