@@ -25,4 +25,4 @@
     <p><strong>Atenção!</strong> Esta tarefa contém anexos...</p>
 <?php endif; ?>
 
-<p>Tenha um bom dia!</p>
+<p>Tenha um bom dia! ;)</p>
