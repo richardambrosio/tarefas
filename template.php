@@ -21,9 +21,10 @@
 
 
         <footer class="text-light text-center bg-secondary">
-            <p class="lead">
+        <div class="container-fluid">
+            <!--<p class="lead">-->
                 Desenvolvido por: <strong>Richard Ambrosio<strong>
-            </p>
+            <!--</p>-->
 
             <div class="row">
                 <div class="col">
@@ -43,6 +44,8 @@
 
             <script src="bibliotecas/bootstrap-4.4.1-dist/css/jquery-3.5.1.min.js"></script>
             <script src="bibliotecas/bootstrap-4.4.1-dist/css/bootstrap.bundle.min.js"></script>
+            </div>
         </footer>
+        
     </body>
 </html>
