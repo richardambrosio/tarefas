@@ -116,7 +116,10 @@ function enviar_email($tarefa, $anexos = [])
         $email->addAttachment("anexos/{$anexo['arquivo']}");
     }
 
-    $email->send();
+    if (!$email->send()) {
+        gravar_log($email->ErrorInfo);
+    }
+
 }
 
 function preparar_corpo_email($tarefa, $anexos)
@@ -136,4 +139,12 @@ function preparar_corpo_email($tarefa, $anexos)
     ob_end_clean();
 
     return $corpo;
+}
+
+function gravar_log($mensagem)
+{
+    $dataHora = date("d-m-Y H:i:s");
+    $mensagem = "{$dataHora} {$mensagem}\n";
+
+    file_put_contents("mensagens.log", $mensagem, FILE_APPEND);
 }
