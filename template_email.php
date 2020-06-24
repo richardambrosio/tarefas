@@ -1,6 +1,8 @@
 <h1>Lembrete - Gerenciador de Tarefas</h1>
 <h2>Tarefa: <?=$tarefa['nome']; ?></h2>
 
+<hr>
+
 <h3>Concluída</h3>
 <p><?=traduz_concluida($tarefa['concluida']); ?></p>
 
