@@ -21,11 +21,16 @@ class RepositorioTarefas
             $prazo = $prazo->format('Y-m-d');
         }
 
-        $sqlGravar =
-            "INSERT INTO tarefas
-                (nome, descricao, prioridade, prazo, concluida)
-            VALUES
-                ('{$nome}', '{$descricao}', '{$prioridade}', '{$prazo}', {$concluida});
+        $sqlGravar = "
+            INSERT INTO tarefas (
+                nome, descricao, prioridade, prazo, concluida
+            ) VALUES (
+                '{$nome}',
+                '{$descricao}',
+                {$prioridade},
+                '{$prazo}',
+                {$concluida}
+            )
         ";
 
         $this->conexao->query($sqlGravar);
@@ -44,14 +49,14 @@ class RepositorioTarefas
             $prazo = $prazo->format('Y-m-d');
         }
 
-        $sqlEditar =
-            "UPDATE tarefas SET
+        $sqlEditar = "
+            UPDATE tarefas SET
                 nome = '{$nome}',
                 descricao = '{$descricao}',
-                prioridade = '{$prioridade}',
+                prioridade = {$prioridade},
                 prazo = '{$prazo}',
                 concluida = {$concluida}
-            WHERE id = {$id};
+            WHERE id = {$id}
         ";
 
         $this->conexao->query($sqlEditar);
@@ -68,31 +73,76 @@ class RepositorioTarefas
 
     private function buscar_tarefas()
     {
-        $sqlBusca = 'SELECT * FROM tarefas;';
+        $sqlBusca = 'SELECT * FROM tarefas';
         $resultado = $this->conexao->query($sqlBusca);
 
         $tarefas = [];
 
         while ($tarefa = $resultado->fetch_object('Tarefa')) {
+            $tarefa->setAnexos($this->buscar_anexos($tarefa->getId()));
             $tarefas[] = $tarefa;
         }
 
         return $tarefas;
     }
 
-    private function buscar_tarefa($tarefa_id)
+    private function buscar_tarefa($id)
     {
-        $sqlBusca = "SELECT * FROM tarefas WHERE id = {$tarefa_id};";
+        $sqlBusca = "SELECT * FROM tarefas WHERE id = {$id}";
         $resultado = $this->conexao->query($sqlBusca);
 
         $tarefa = $resultado->fetch_object('Tarefa');
+        $tarefa->setAnexos($this->buscar_anexos($tarefa->getId()));
 
         return $tarefa;
     }
 
-    public function remover($tarefa_id)
+    public function salvar_anexo(Anexo $anexo)
     {
-        $sqlRemover = "DELETE FROM tarefas WHERE id = {$tarefa_id};";
+        $sqlGravar = "
+            INSERT INTO anexos (
+                tarefa_id, nome, arquivo
+            ) VALUES (
+                {$anexo->getTarefaId()},
+                '{$anexo->getNome()}',
+                '{$anexo->getArquivo()}'
+            )";
+
+        $this->conexao->query($sqlGravar);
+    }
+
+    public function buscar_anexos($tarefa_id)
+    {
+        $sqlBusca = "SELECT * FROM anexos WHERE tarefa_id = {$tarefa_id}";
+        $resultado = $this->conexao->query($sqlBusca);
+
+        $anexos = array();
+
+        while ($anexo = $resultado->fetch_object('Anexo')) {
+            $anexos[] = $anexo;
+        }
+
+        return $anexos;
+    }
+
+    public function buscar_anexo($anexo_id)
+    {
+        $sqlBusca = "SELECT * FROM anexos WHERE id = {$anexo_id}";
+        $resultado = $this->conexao->query($sqlBusca);
+
+        return $resultado->fetch_object('Anexo');
+    }
+
+    public function remover($id)
+    {
+        $sqlRemover = "DELETE FROM tarefas WHERE id = {$id}";
+
+        $this->conexao->query($sqlRemover);
+    }
+
+    public function remover_anexo($id)
+    {
+        $sqlRemover = "DELETE FROM anexos WHERE id = {$id}";
 
         $this->conexao->query($sqlRemover);
     }

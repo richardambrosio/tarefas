@@ -2,82 +2,55 @@
     <head>
         <meta charset="utf-8" />
         <title>Gerenciador de Tarefas</title>
-        <link rel="stylesheet" href="bibliotecas/bootstrap-4.4.1-dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="tarefas.css" type="text/css" />
     </head>
     <body>
-        <div class="jumbotron">
-            <div class="container-fluid">
-                <h1 class="display-4">Tarefa: <?=$tarefa['nome']; ?></h1>
-            </div>
-        </div>
-        <div class="container" id="bloco_pricipal">
-            
-            <a href="tarefas.php" class="btn btn-info">Voltar para a Lista de Tarefas</a>
-            <br>
-            <br>
+        <div id="bloco_principal">
+            <h1>Tarefa: <?=$tarefa->getNome(); ?></h1>
 
-            <h4>Concluída:</h4>
-            <p class="lead">
-                <?=traduz_concluida($tarefa['concluida']); ?>
-            </p>
-            
-            <h4>Prazo:</h4>
-            <p class="lead">
-                <?=traduz_data_para_exibir($tarefa['prazo']); ?>
-            </p>
-            <hr>
+            <p><a href="tarefas.php">Voltar para a lista de tarefas</a>.</p>
 
-            <h4>Anexos</h4>
-            <!--Lista de Anexos-->
-            <?php if (count($anexos) > 0) : ?>
-                <table class="table table-striped table-borderless table-hover">
-                    <thead class="thead-light">
+            <p><strong>Concluída:</strong> <?=traduz_concluida($tarefa->getConcluida()); ?></p>
+            <p><strong>Descrição:</strong> <?=nl2br($tarefa->getDescricao()); ?></p>
+            <p><strong>Prazo:</strong> <?=traduz_data_para_exibir($tarefa->getPrazo()); ?></p>
+            <p><strong>Prioridade:</strong> <?=traduz_prioridade($tarefa->getPrioridade()); ?></p>
+
+            <h2>Anexos</h2>
+            <!-- lista de anexos -->
+            <?php if (count($tarefa->getAnexos()) > 0) : ?>
+                <table>
+                    <tr>
+                        <th>Arquivo</th>
+                        <th>Opções</th>
+                    </tr>
+                    <?php foreach ($tarefa->getAnexos() as $anexo) : ?>
                         <tr>
-                            <th>Arquivo</th>
-                            <th>Opções</th>
-                        </tr>
-                    </thead>
-
-                    <?php foreach ($anexos as $anexo) : ?>
-                        <tr>
-                            <td><?=$anexo['nome']; ?></td>
+                            <td><?=$anexo->getNome(); ?></td>
                             <td>
-                                <a class="btn btn-outline-warning" href="anexos/<?=$anexo['arquivo']; ?>">Download</a>
-                                <a class="btn btn-outline-danger" href="remover_anexo.php?id=<?=$anexo['id']; ?>">Remover</a>
+                                <a href="anexos/<?=$anexo->getArquivo(); ?>">Download</a>
+                                <a href="remover_anexo.php?id=<?=$anexo->getId(); ?>">Remover</a>
                             </td>
                         </tr>
-                    <?php endforeach ?>
+                    <?php endforeach; ?>
                 </table>
             <?php else : ?>
-                <p class="lead">Não há anexos para essa tarefa...</p>
+                <p>Não há anexos para esta tarefa.</p>
             <?php endif; ?>
 
-            <!--Formulário para um novo Anexo-->
+            <!-- formulário para um novo anexo -->
             <form action="" method="post" enctype="multipart/form-data">
                 <fieldset>
-                    <input type="hidden" name="tarefa_id" value="<?=$tarefa['id']; ?>" />
-
-                    <div class="form-group">
-                        <legend class="text-info">Novo Anexo</legend>
-                    </div>
-                    
-                    <?php if ($tem_erros && array_key_exists('anexo', $erros_validacao)) : ?>
-                        <div class="alert alert-danger">
+                    <legend>Novo anexo</legend>
+                    <input type="hidden" name="tarefa_id" value="<?=$tarefa->getId(); ?>" />
+                    <label>
+                        <?php if ($tem_erros && isset($erros_validacao['anexo'])) : ?>
                             <span class="erro"><?=$erros_validacao['anexo']; ?></span>
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="form-group">
-                        <input type="file" class="form-control-file" name="anexo" />
-                    </div>
-                    
-                    <input type="submit" class="btn btn-success" value="Cadastrar" />
+                        <?php endif; ?>
+                        <input type="file" name="anexo" />
+                    </label>
+                    <input type="submit" value="Cadastrar" class="botao" />
                 </fieldset>
             </form>
         </div>
-
-        <script src="bibliotecas/bootstrap-4.4.1-dist/css/jquery-3.5.1.min.js"></script>
-        <script src="bibliotecas/bootstrap-4.4.1-dist/css/bootstrap.bundle.min.js"></script>
     </body>
 </html>

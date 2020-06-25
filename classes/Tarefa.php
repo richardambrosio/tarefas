@@ -8,58 +8,73 @@ class Tarefa
     private $prazo;
     private $prioridade;
     private $concluida;
-    private $anexos = [];
 
-    public function setId(int $id)
+    /**
+     * @var Array de Anexo
+     */
+    private $anexos;
+
+    public function __construct()
     {
-        $this->id = (int) $id;
+        $this->anexos = [];
     }
-    public function getId() : int
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId()
     {
         return $this->id;
     }
 
-    public function setNome(string $nome)
+    public function setNome($nome)
     {
         $this->nome = $nome;
     }
-    public function getNome() : string
+
+    public function getNome()
     {
         return $this->nome;
     }
 
-    public function setDescricao(string $descricao)
+    public function setDescricao($descricao)
     {
         $this->descricao = $descricao;
     }
-    public function getDescricao() : string
+
+    public function getDescricao()
     {
         return $this->descricao;
     }
 
-    public function setPrazo(string $prazo)
+    public function setPrazo($prazo)
     {
         $this->prazo = $prazo;
     }
-    public function getPrazo() : string
+
+    public function getPrazo()
     {
         return $this->prazo;
     }
 
-    public function setPrioridade(int $prioridade)
+    public function setPrioridade($prioridade)
     {
         $this->prioridade = $prioridade;
     }
-    public function getPrioridade() : int
+
+    public function getPrioridade()
     {
         return $this->prioridade;
     }
 
-    public function setConcluida(bool $concluida)
+    public function setConcluida($concluida)
     {
         $this->concluida = $concluida;
     }
-    public function getConcluida() : bool
+
+    public function getConcluida()
     {
         return $this->concluida;
     }
@@ -72,14 +87,14 @@ class Tarefa
             $this->adicionarAnexo($anexo);
         }
     }
-    public function getanexos() : array
-    {
-        return $this->anexos;
-    }
 
     public function adicionarAnexo(Anexo $anexo)
     {
         array_push($this->anexos, $anexo);
     }
 
+    public function getAnexos()
+    {
+        return $this->anexos;
+    }
 }

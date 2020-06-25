@@ -1,96 +1,39 @@
-<div class="container">
-    <form method="POST">
-        <div class="row">
-            <div class="col">
-                <input type="hidden" name="id" value="<?php echo $tarefa['id']; ?>">
-
-                <fieldset>
-                    <legend class="text-info">Nova Tarefa</legend>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <legend>Tarefa:</legend>
-                                <?php if ($tem_erros && array_key_exists('nome', $erros_validacao)) : ?>
-                                    <div class="alert alert-danger">
-                                        <span class="erro"><?=$erros_validacao['nome']; ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                <input type="text" class="form-control" name="nome" placeholder="Nome da tarefa..." value="<?php echo $tarefa['nome']; ?>" />
-                            </div>
-        
-                            <div class="form-group">
-                                <legend>Descrição(Opcional):</legend>
-                                <textarea class="form-control" name="descricao" placeholder="Especifique a tarefa">
-                                    <?php echo $tarefa['descricao']; ?>
-                                </textarea>
-                            </div>
-        
-                            <div class="form-group">
-                                <legend>Prazo(Opcional):</legend>
-                                <?php if ($tem_erros && array_key_exists('prazo', $_POST)) : ?>
-                                    <div class="alert alert-danger">
-                                        <span class="erro"><?=$erros_validacao['prazo']; ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                <input type="text" class="form-control" name="prazo" placeholder="dd/mm/aaaa" value="<?php echo traduz_data_para_exibir($tarefa['prazo']) ?>" />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <legend>Prioridade:</legend>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="prioridade" value="1"
-                                        <?php echo ($tarefa['prioridade'] == 1)
-                                            ? 'checked'
-                                            : '';
-                                        ?>
-                                    />
-                                    <label class="form-check-label">Baixa</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="prioridade" value="2"
-                                        <?php echo ($tarefa['prioridade'] == 2)
-                                            ? 'checked'
-                                            : '';
-                                        ?>
-                                    />
-                                    <label class="form-check-label">Média</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="prioridade" value="3"
-                                        <?php echo ($tarefa['prioridade'] == 3)
-                                            ? 'checked'
-                                            : '';
-                                        ?>
-                                    />
-                                    <label class="form-check-label">Alta</label>
-                                </div>
-                            </div>
-        
-                            <div class="form-check form-group">
-                                <input type="checkbox" class="form-check-input" name="concluida" value="1"
-                                <?php echo ($tarefa['concluida'] == 1)
-                                            ? 'checked'
-                                            : '';
-                                            ?>
-                                    />
-                                <label class="form-check-label">Tarefa Concluída</label>
-                            </div>
-        
-                            <div class="form-check form-group">
-                                <input type="checkbox" class="form-check-input" name="lembrete" value="1" />
-                                <label class="form-check-label">Lembrete por e-mail</label>
-                            </div>
-        
-                            <input type="submit" class="btn btn-success" value="<?php echo ($tarefa['id'] > 0) ? 'Atualizar' : 'Cadastrar'; ?>" />
-                        </div>
-                    </div><!--row-->
-
-                </fieldset>
-            </div>
-        </div>
-    </form>
-</div>
-<hr>
-<br>
+<form method="POST">
+    <input type="hidden" name="id" value="<?php echo $tarefa->getId(); ?>" />
+    <fieldset>
+        <legend>Nova tarefa</legend>
+        <label>
+            Tarefa:
+            <?php if ($tem_erros && isset($erros_validacao['nome'])) : ?>
+                <span class="erro"><?php echo $erros_validacao['nome']; ?></span>
+            <?php endif; ?>
+            <input type="text" name="nome" value="<?php echo $tarefa->getNome(); ?>" />
+        </label>
+        <label>
+            Descrição (Opcional):
+            <textarea name="descricao"><?php echo $tarefa->getDescricao(); ?></textarea>
+        </label>
+        <label>
+            Prazo (Opcional):
+            <?php if ($tem_erros && isset($erros_validacao['prazo'])) : ?>
+                <span class="erro"><?php echo $erros_validacao['prazo']; ?></span>
+            <?php endif; ?>
+            <input type="text" name="prazo" value="<?php echo traduz_data_para_exibir($tarefa->getPrazo()); ?>" />
+        </label>
+        <fieldset>
+            <legend>Prioridade:</legend>
+            <input type="radio" name="prioridade" value="1" <?php echo ($tarefa->getPrioridade() == 1) ? 'checked' : ''; ?> /> Baixa
+            <input type="radio" name="prioridade" value="2" <?php echo ($tarefa->getPrioridade() == 2) ? 'checked' : ''; ?> /> Média
+            <input type="radio" name="prioridade" value="3" <?php echo ($tarefa->getPrioridade() == 3) ? 'checked' : ''; ?> /> Alta
+        </fieldset>
+        <label>
+            Tarefa concluída:
+            <input type="checkbox" name="concluida" value="1" <?php echo ($tarefa->getConcluida()) ? 'checked' : ''; ?> />
+        </label>
+        <label>
+            Lembrete por e-mail:
+            <input type="checkbox" name="lembrete" value="1" />
+        </label>
+        <input type="submit" value="<?php echo ($tarefa->getId() > 0) ? 'Atualizar' : 'Cadastrar'; ?>" class="botao" />
+    </fieldset>
+</form>
