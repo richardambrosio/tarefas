@@ -11,8 +11,8 @@ class RepositorioTarefas
 
     public function salvar(Tarefa $tarefa)
     {
-        $nome = $tarefa->getNome();
-        $descricao = $tarefa->getDescricao();
+        $nome = $this->conexao->escape_string($tarefa->getNome());
+        $descricao = $this->conexao->escape_string($tarefa->getDescricao());
         $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
         $concluida = ($tarefa->getConcluida()) ? 1 : 0;
@@ -39,8 +39,8 @@ class RepositorioTarefas
     public function atualizar(Tarefa $tarefa)
     {
         $id = $tarefa->getId();
-        $nome = $tarefa->getNome();
-        $descricao = $tarefa->getDescricao();
+        $nome = $this->conexao->escape_string($tarefa->getNome());
+        $descricao = $this->conexao->escape_string($tarefa->getDescricao());
         $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
         $concluida = ($tarefa->getConcluida()) ? 1 : 0;
@@ -88,6 +88,8 @@ class RepositorioTarefas
 
     private function buscar_tarefa($id)
     {
+        $id = $this->conexao->escape_string($id);
+
         $sqlBusca = "SELECT * FROM tarefas WHERE id = {$id}";
         $resultado = $this->conexao->query($sqlBusca);
 
@@ -99,13 +101,16 @@ class RepositorioTarefas
 
     public function salvar_anexo(Anexo $anexo)
     {
+        $nome = $this->conexao->escape_string($anexo->getNome());
+        $arquivo = $this->conexao->escape_string($anexo->getArquivo());
+
         $sqlGravar = "
             INSERT INTO anexos (
                 tarefa_id, nome, arquivo
             ) VALUES (
                 {$anexo->getTarefaId()},
-                '{$anexo->getNome()}',
-                '{$anexo->getArquivo()}'
+                '{$nome}',
+                '{$arquivo}'
             )";
 
         $this->conexao->query($sqlGravar);
@@ -113,6 +118,8 @@ class RepositorioTarefas
 
     public function buscar_anexos($tarefa_id)
     {
+        $tarefa_id = $this->conexao->escape_string($tarefa_id);
+
         $sqlBusca = "SELECT * FROM anexos WHERE tarefa_id = {$tarefa_id}";
         $resultado = $this->conexao->query($sqlBusca);
 
@@ -127,6 +134,8 @@ class RepositorioTarefas
 
     public function buscar_anexo($anexo_id)
     {
+        $anexo_id = $this->conexao->escape_string($anexo_id);
+
         $sqlBusca = "SELECT * FROM anexos WHERE id = {$anexo_id}";
         $resultado = $this->conexao->query($sqlBusca);
 
@@ -135,6 +144,8 @@ class RepositorioTarefas
 
     public function remover($id)
     {
+        $id = $this->conexao->escape_string($id);
+
         $sqlRemover = "DELETE FROM tarefas WHERE id = {$id}";
 
         $this->conexao->query($sqlRemover);
@@ -142,6 +153,8 @@ class RepositorioTarefas
 
     public function remover_anexo($id)
     {
+        $id = $this->conexao->escape_string($id);
+        
         $sqlRemover = "DELETE FROM anexos WHERE id = {$id}";
 
         $this->conexao->query($sqlRemover);
