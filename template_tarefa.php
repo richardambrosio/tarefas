@@ -6,12 +6,12 @@
     </head>
     <body>
         <div id="bloco_principal">
-            <h1>Tarefa: <?=$tarefa->getNome(); ?></h1>
+            <h1>Tarefa: <?=htmlentities($tarefa->getNome()); ?></h1>
 
             <p><a href="tarefas.php">Voltar para a lista de tarefas</a>.</p>
 
             <p><strong>Concluída:</strong> <?=traduz_concluida($tarefa->getConcluida()); ?></p>
-            <p><strong>Descrição:</strong> <?=nl2br($tarefa->getDescricao()); ?></p>
+            <p><strong>Descrição:</strong> <?=nl2br(htmlentities($tarefa->getDescricao())); ?></p>
             <p><strong>Prazo:</strong> <?=traduz_data_para_exibir($tarefa->getPrazo()); ?></p>
             <p><strong>Prioridade:</strong> <?=traduz_prioridade($tarefa->getPrioridade()); ?></p>
 
@@ -25,7 +25,7 @@
                     </tr>
                     <?php foreach ($tarefa->getAnexos() as $anexo) : ?>
                         <tr>
-                            <td><?=$anexo->getNome(); ?></td>
+                            <td><?=htmlentities($anexo->getNome()); ?></td>
                             <td>
                                 <a href="anexos/<?=$anexo->getArquivo(); ?>">Download</a>
                                 <a href="remover_anexo.php?id=<?=$anexo->getId(); ?>">Remover</a>

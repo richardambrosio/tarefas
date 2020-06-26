@@ -11,11 +11,11 @@
         <tr>
             <td>
                 <a href="tarefa.php?id=<?=$tarefa->getId(); ?>">
-                    <?=$tarefa->getNome(); ?>
+                    <?=htmlentities($tarefa->getNome()); ?>
                 </a>
             </td>
             <td>
-                <?=$tarefa->getDescricao(); ?>
+                <?=htmlentities($tarefa->getDescricao()); ?>
             </td>
             <td>
                 <?=traduz_data_para_exibir($tarefa->getPrazo()); ?>

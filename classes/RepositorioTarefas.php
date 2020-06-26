@@ -11,8 +11,8 @@ class RepositorioTarefas
 
     public function salvar(Tarefa $tarefa)
     {
-        $nome = $this->conexao->escape_string($tarefa->getNome());
-        $descricao = $this->conexao->escape_string($tarefa->getDescricao());
+        $nome = strip_tags($this->conexao->escape_string($tarefa->getNome()));
+        $descricao = strip_tags($this->conexao->escape_string($tarefa->getDescricao()));
         $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
         $concluida = ($tarefa->getConcluida()) ? 1 : 0;
@@ -39,8 +39,8 @@ class RepositorioTarefas
     public function atualizar(Tarefa $tarefa)
     {
         $id = $tarefa->getId();
-        $nome = $this->conexao->escape_string($tarefa->getNome());
-        $descricao = $this->conexao->escape_string($tarefa->getDescricao());
+        $nome = strip_tags($this->conexao->escape_string($tarefa->getNome()));
+        $descricao = strip_tags($this->conexao->escape_string($tarefa->getDescricao()));
         $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
         $concluida = ($tarefa->getConcluida()) ? 1 : 0;
@@ -102,7 +102,7 @@ class RepositorioTarefas
     public function salvar_anexo(Anexo $anexo)
     {
         $nome = $this->conexao->escape_string($anexo->getNome());
-        $arquivo = $this->conexao->escape_string($anexo->getArquivo());
+        $arquivo = strip_tags($this->conexao->escape_string($anexo->getArquivo()));
 
         $sqlGravar = "
             INSERT INTO anexos (
@@ -154,7 +154,7 @@ class RepositorioTarefas
     public function remover_anexo($id)
     {
         $id = $this->conexao->escape_string($id);
-        
+
         $sqlRemover = "DELETE FROM anexos WHERE id = {$id}";
 
         $this->conexao->query($sqlRemover);
