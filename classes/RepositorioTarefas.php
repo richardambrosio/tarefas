@@ -2,48 +2,38 @@
 
 class RepositorioTarefas
 {
-    private $conexao;
+    private $pdo;
 
-    public function __construct($conexao)
+    public function __construct(PDO $pdo)
     {
-        $this->conexao = $conexao;
+        $this->pdo = $pdo;
     }
 
     public function salvar(Tarefa $tarefa)
     {
-        $nome = strip_tags($this->conexao->escape_string($tarefa->getNome()));
-        $descricao = strip_tags($this->conexao->escape_string($tarefa->getDescricao()));
-        $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
-        $concluida = ($tarefa->getConcluida()) ? 1 : 0;
 
         if (is_object($prazo)) {
             $prazo = $prazo->format('Y-m-d');
         }
 
-        $sqlGravar = "
-            INSERT INTO tarefas (
-                nome, descricao, prioridade, prazo, concluida
-            ) VALUES (
-                '{$nome}',
-                '{$descricao}',
-                {$prioridade},
-                '{$prazo}',
-                {$concluida}
-            )
-        ";
+        $sqlGravar = "INSERT INTO tarefas (nome, descricao, prioridade, prazo, concluida)
+            VALUES (:nome, :descricao, :prioridade, :prazo, :concluida)";
+        
+        $query = $this->pdo->prepare($sqlGravar);
 
-        $this->conexao->query($sqlGravar);
+        $query->execute([
+            'nome' => strip_tags($tarefa->getNome()),
+            'descricao' => strip_tags($tarefa->getDescricao()),
+            'prioridade' => $tarefa->getPrioridade(),
+            'prazo' => $prazo,
+            'concluida' => ($tarefa->getConcluida()) ? 1 : 0,
+        ]);
     }
 
     public function atualizar(Tarefa $tarefa)
     {
-        $id = $tarefa->getId();
-        $nome = strip_tags($this->conexao->escape_string($tarefa->getNome()));
-        $descricao = strip_tags($this->conexao->escape_string($tarefa->getDescricao()));
-        $prioridade = $tarefa->getPrioridade();
         $prazo = $tarefa->getPrazo();
-        $concluida = ($tarefa->getConcluida()) ? 1 : 0;
 
         if (is_object($prazo)) {
             $prazo = $prazo->format('Y-m-d');
@@ -51,15 +41,24 @@ class RepositorioTarefas
 
         $sqlEditar = "
             UPDATE tarefas SET
-                nome = '{$nome}',
-                descricao = '{$descricao}',
-                prioridade = {$prioridade},
-                prazo = '{$prazo}',
-                concluida = {$concluida}
-            WHERE id = {$id}
+                nome = :nome,
+                descricao = :descricao,
+                prioridade = :prioridade,
+                prazo = :prazo,
+                concluida = :concluida
+            WHERE id = :id
         ";
 
-        $this->conexao->query($sqlEditar);
+        $query = $this->pdo->prepare($sqlEditar);
+
+        $query->execute([
+            'nome' => strip_tags($tarefa->getNome()),
+            'descricao' => strip_tags($tarefa->getDescricao()),
+            'prioridade' => $tarefa->getPrioridade(),
+            'prazo' => $prazo,
+            'concluida' => ($tarefa->getConcluida()) ? 1 : 0,
+            'id' => $tarefa->getId(),
+        ]);
     }
 
     public function buscar($tarefa_id = 0)
@@ -74,11 +73,11 @@ class RepositorioTarefas
     private function buscar_tarefas()
     {
         $sqlBusca = 'SELECT * FROM tarefas';
-        $resultado = $this->conexao->query($sqlBusca);
+        $resultado = $this->pdo->query($sqlBusca, PDO::FETCH_CLASS, 'Tarefa');
 
         $tarefas = [];
 
-        while ($tarefa = $resultado->fetch_object('Tarefa')) {
+        foreach ($resultado as $tarefa) {
             $tarefa->setAnexos($this->buscar_anexos($tarefa->getId()));
             $tarefas[] = $tarefa;
         }
@@ -88,12 +87,12 @@ class RepositorioTarefas
 
     private function buscar_tarefa($id)
     {
-        $id = $this->conexao->escape_string($id);
+        $sqlBusca = "SELECT * FROM tarefas WHERE id = :id";
+        $query = $this->pdo->prepare($sqlBusca);
+        $query->execute(['id' => $id,]);
 
-        $sqlBusca = "SELECT * FROM tarefas WHERE id = {$id}";
-        $resultado = $this->conexao->query($sqlBusca);
+        $tarefa = $query->fetchObject('Tarefa');
 
-        $tarefa = $resultado->fetch_object('Tarefa');
         $tarefa->setAnexos($this->buscar_anexos($tarefa->getId()));
 
         return $tarefa;
@@ -101,31 +100,28 @@ class RepositorioTarefas
 
     public function salvar_anexo(Anexo $anexo)
     {
-        $nome = $this->conexao->escape_string($anexo->getNome());
-        $arquivo = strip_tags($this->conexao->escape_string($anexo->getArquivo()));
-
         $sqlGravar = "
-            INSERT INTO anexos (
-                tarefa_id, nome, arquivo
-            ) VALUES (
-                {$anexo->getTarefaId()},
-                '{$nome}',
-                '{$arquivo}'
-            )";
+            INSERT INTO anexos (tarefa_id, nome, arquivo)
+            VALUES (:tarefa_id, :nome, :arquivo)";
 
-        $this->conexao->query($sqlGravar);
+        $query = $this->pdo->prepare($sqlGravar);
+
+        $query->execute([
+            'tarefa_id' => $anexo->getTarefaId(),
+            'nome' => strip_tags($anexo->getNome()),
+            'arquivo' => strip_tags($anexo->getArquivo()),
+        ]);
     }
 
     public function buscar_anexos($tarefa_id)
     {
-        $tarefa_id = $this->conexao->escape_string($tarefa_id);
-
-        $sqlBusca = "SELECT * FROM anexos WHERE tarefa_id = {$tarefa_id}";
-        $resultado = $this->conexao->query($sqlBusca);
+        $sqlBusca = "SELECT * FROM anexos WHERE tarefa_id = :tarefa_id";
+        $query = $this->pdo->prepare($sqlBusca);
+        $query->execute(["tarefa_id" => $tarefa_id,]);
 
         $anexos = array();
 
-        while ($anexo = $resultado->fetch_object('Anexo')) {
+        while ($anexo = $query->fetchObject('Anexo')) {
             $anexos[] = $anexo;
         }
 
@@ -134,29 +130,29 @@ class RepositorioTarefas
 
     public function buscar_anexo($anexo_id)
     {
-        $anexo_id = $this->conexao->escape_string($anexo_id);
+        $sqlBusca = "SELECT * FROM anexos WHERE id = :id";
 
-        $sqlBusca = "SELECT * FROM anexos WHERE id = {$anexo_id}";
-        $resultado = $this->conexao->query($sqlBusca);
+        $query = $this->pdo->prepare($sqlBusca);
+        $query->execute(['id' => $anexo_id,]);
 
-        return $resultado->fetch_object('Anexo');
+        return $query->fetchObject('Anexo');
     }
 
     public function remover($id)
     {
-        $id = $this->conexao->escape_string($id);
+        $sqlRemover = "DELETE FROM tarefas WHERE id = :id";
 
-        $sqlRemover = "DELETE FROM tarefas WHERE id = {$id}";
+        $query = $this->pdo->prepare($sqlRemover);
 
-        $this->conexao->query($sqlRemover);
+        $query->execute(['id' => $id,]);
     }
 
     public function remover_anexo($id)
     {
-        $id = $this->conexao->escape_string($id);
+        $sqlRemover = "DELETE FROM anexos WHERE id = :id";
 
-        $sqlRemover = "DELETE FROM anexos WHERE id = {$id}";
-
-        $this->conexao->query($sqlRemover);
+        $query = $this->pdo->prepare($sqlRemover);
+        
+        $query->execute(['id' => $id,]);
     }
 }
