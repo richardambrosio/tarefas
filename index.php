@@ -17,11 +17,9 @@ $repositorio_tarefas = new RepositorioTarefas($pdo);
 
 $rota = "tarefas"; //Rota padrão
 
-if (array_key_exists("rota", $_GET)) {
-    $rota = (string) $_GET["rota"];
-}
+if (array_key_exists("rota", $_GET)) $rota = (string) $_GET["rota"];
 
 //Incluir o arquivo que vai tratar a requisição
 
 if (is_file("controllers/{$rota}.php")) require "controllers/{$rota}.php";
-else echo "Rota não encontrada";
+else require "controllers/404.php";
