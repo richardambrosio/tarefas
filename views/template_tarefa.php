@@ -2,55 +2,94 @@
     <head>
         <meta charset="utf-8" />
         <title>Gerenciador de Tarefas</title>
+        <link rel="stylesheet" href="libs/bootstrap-4.4.1-dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/tarefas.css" type="text/css" />
     </head>
     <body>
-        <div id="bloco_principal">
-            <h1>Tarefa: <?=htmlentities($tarefa->getNome()); ?></h1>
+        <div class="jumbotron">
+            <div class="container-fluid">
+                <h1 class="display-4">Tarefa: <?=htmlentities($tarefa->getNome()); ?></h1>
+            </div>
+        </div>
 
-            <p><a href="index.php?rota=tarefas">Voltar para a lista de tarefas</a>.</p>
+        <div class="container">
+            <a class="btn btn-info" href="index.php?rota=tarefas">Voltar para a lista de tarefas</a>
 
-            <p><strong>Concluída:</strong> <?=traduz_concluida($tarefa->getConcluida()); ?></p>
-            <p><strong>Descrição:</strong> <?=nl2br(htmlentities($tarefa->getDescricao())); ?></p>
-            <p><strong>Prazo:</strong> <?=traduz_data_para_exibir($tarefa->getPrazo()); ?></p>
-            <p><strong>Prioridade:</strong> <?=traduz_prioridade($tarefa->getPrioridade()); ?></p>
+            <hr>
 
-            <h2>Anexos</h2>
+            <h4>Concluída:</h4>
+            <p class="lead">
+                <?=traduz_concluida($tarefa->getConcluida()); ?>
+            </p>
+            
+            <h4>Descrição:</h4>
+            <p class="lead">
+                <?=nl2br(htmlentities($tarefa->getDescricao())); ?>
+            </p>
+            
+            <h4>Prazo:</h4>
+            <p class="lead">
+                <?=traduz_data_para_exibir($tarefa->getPrazo()); ?>
+            </p>
+            
+            <h4>Prioridade:</h4>
+            <p class="lead">
+                <?=traduz_prioridade($tarefa->getPrioridade()); ?>
+            </p>
+
+            <hr>
+
+            <h4>Anexos</h4>
             <!-- lista de anexos -->
             <?php if (count($tarefa->getAnexos()) > 0) : ?>
-                <table>
-                    <tr>
-                        <th>Arquivo</th>
-                        <th>Opções</th>
-                    </tr>
+                <table class="table table-striped table-borderless table-hover">
+                    <thead class="thead-light">
+                        <tr class=>
+                            <th>Arquivo</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
                     <?php foreach ($tarefa->getAnexos() as $anexo) : ?>
                         <tr>
                             <td><?=htmlentities($anexo->getNome()); ?></td>
                             <td>
-                                <a href="anexos/<?=$anexo->getArquivo(); ?>">Download</a>
-                                <a href="index.php?rota=remover_anexo&id=<?=$anexo->getId(); ?>">Remover</a>
+                                <a class="btn btn-outline-warning" href="anexos/<?=$anexo->getArquivo(); ?>">Download</a>
+                                <a class="btn btn-outline-danger" href="index.php?rota=remover_anexo&id=<?=$anexo->getId(); ?>">Remover</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
             <?php else : ?>
-                <p>Não há anexos para esta tarefa.</p>
+                <p class="lead">Não há anexos para esta tarefa.</p>
             <?php endif; ?>
+
+            <hr>
 
             <!-- formulário para um novo anexo -->
             <form action="" method="post" enctype="multipart/form-data">
                 <fieldset>
-                    <legend>Novo anexo</legend>
                     <input type="hidden" name="tarefa_id" value="<?=$tarefa->getId(); ?>" />
-                    <label>
-                        <?php if ($tem_erros && isset($erros_validacao['anexo'])) : ?>
+
+                    <div class="form-group">
+                        <legend class="text-info">Novo anexo</legend>
+                    </div>
+                    
+                    <?php if ($tem_erros && isset($erros_validacao['anexo'])) : ?>
+                        <div class="alert alert-danger">
                             <span class="erro"><?=$erros_validacao['anexo']; ?></span>
-                        <?php endif; ?>
-                        <input type="file" name="anexo" />
-                    </label>
-                    <input type="submit" value="Cadastrar" class="botao" />
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="form-group">
+                        <input class="form-control-file" type="file" name="anexo" />
+                    </div>
+                    
+                    <input type="submit" class="btn btn-success" value="Cadastrar" />
                 </fieldset>
             </form>
-        </div>
+        </div><!--container-->
+
+        <script src="libs/bootstrap-4.4.1-dist/css/jquery-3.5.1.min.js"></script>
+        <script src="libs/bootstrap-4.4.1-dist/css/bootstrap.bundle.min.js"></script>
     </body>
 </html>
