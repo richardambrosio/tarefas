@@ -42,7 +42,9 @@ define('SENHA_REMETENTE', 'Sua senha');
 
 > Arquivo index.php
 
-Antes de testar o funcionamento da aplicação, é necessário alterar o primeiro `require` do arquivo [index.php](index.php). Mude o valor de `../config.php` ...
+Antes de testar o funcionamento da aplicação, é necessário alterar o primeiro `require` do arquivo [index.php](index.php).
+
+Mude o valor de `../config.php` ...
 
 ```php
 require "../config.php";
