@@ -24,7 +24,7 @@ GRANT ALL PRIVILEGES ON tarefas.* TO 'sistema_tarefas'@'localhost' IDENTIFIED BY
 
 O arquivo [config.php](config/config.php) contém as constantes que configuram acesso ao banco de dados e envio de e-mails.
 
-Caso tenha criado o banco de dados ou usuário/senha com nomes diferentes. Você pode alterá-los nas linhas acima também.
+Caso tenha criado o banco de dados ou usuário/senha com nomes diferentes. Você pode alterá-los nas linhas iniciais do arquivo.
 
 ```php
 define('BD_USUARIO', 'sistema_tarefas');
