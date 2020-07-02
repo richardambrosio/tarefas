@@ -6,6 +6,8 @@ Você pode encontrar o livro através do link https://www.casadocodigo.com.br/pr
 
 A aplicação segue os exemplos do livro, com umas mudanças pessoais para melhorar a visualização (Bootstrap 4 e FontAwesome).
 
+Vale ressaltar que é um projeto feito apenas para estudos!!
+
 ----------------------------------------------------------------------
 
 ## Informações importantes
@@ -40,7 +42,7 @@ define('SENHA_REMETENTE', 'Sua senha');
 
 > Arquivo index.php
 
-Antes de testar o funcionamento da aplicação, precisamos alterar o primeiro 'require' do arquivo [index.php](index.php). Mude o valor de '../config.php' 
+Antes de testar o funcionamento da aplicação, é necessário alterar o primeiro 'require' do arquivo [index.php](index.php). Mude o valor de '../config.php' 
 
 ```php
 require "../config.php";
