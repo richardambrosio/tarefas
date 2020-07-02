@@ -8,6 +8,7 @@ A aplicação segue os exemplos do livro, com umas mudanças pessoais para melho
 
 ----------------------------------------------------------------------
 
+
 ## Informações importantes
 
 > Arquivo config/config.php
@@ -28,6 +29,18 @@ define('BD_SENHA', 'sistema');
 define('BD_DSN', 'mysql:dbname=tarefas;host=localhost');
 ```
 
+
 > Arquivo index.php
 
-Antes de testar o funcionamento da aplicação, altere o primeiro 'require' do arquivo. Mudando o valor '../config.php' para 'config/config.php'.
+Antes de testar o funcionamento da aplicação, altere o primeiro 'require' do arquivo.
+Mude o valor de '../config.php' 
+
+```php
+require "../config.php";
+```
+
+Para 'config/config.php'.
+
+```php
+require "config/config.php";
+```
