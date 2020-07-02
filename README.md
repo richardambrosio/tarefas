@@ -8,10 +8,11 @@ A aplicação segue os exemplos do livro, com umas mudanças pessoais para melho
 
 ----------------------------------------------------------------------
 
-
 ## Informações importantes
 
 > Arquivo config/config.php
+
+O arquivo [config.php](config/config.php) contém as constantes que configuram acesso ao banco de dados e envio de e-mails.
 
 Altere as constantes 'EMAIL_NOTIFICACAO', 'EMAIL_REMETENTE' e 'SENHA_REMETENTE' para poder funcionar o envio de e-mails:
 
@@ -21,7 +22,8 @@ define('EMAIL_REMETENTE', 'Seu email');
 define('SENHA_REMETENTE', 'Sua senha');
 ```
 
-Caso tenha criado banco de dados ou usuário/senha com nomes diferentes. Você pode alterá-los acima também:
+Caso tenha criado banco de dados ou usuário/senha com nomes diferentes. Você pode alterá-los nas linhas acima também.
+Essas informações ficam no mesmo arquivo [config.php](config/config.php).
 
 ```php
 define('BD_USUARIO', 'sistema_tarefas');
@@ -29,11 +31,9 @@ define('BD_SENHA', 'sistema');
 define('BD_DSN', 'mysql:dbname=tarefas;host=localhost');
 ```
 
-
 > Arquivo index.php
 
-Antes de testar o funcionamento da aplicação, altere o primeiro 'require' do arquivo.
-Mude o valor de '../config.php' 
+Antes de testar o funcionamento da aplicação, precisamos alterar o primeiro 'require' do arquivo [index.php](index.php). Mude o valor de '../config.php' 
 
 ```php
 require "../config.php";
