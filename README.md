@@ -32,7 +32,7 @@ define('BD_SENHA', 'sistema');
 define('BD_DSN', 'mysql:dbname=tarefas;host=localhost');
 ```
 
-Altere as constantes `EMAIL_NOTIFICACAO`, 'EMAIL_REMETENTE' e 'SENHA_REMETENTE' para poder funcionar o envio de e-mails:
+Altere as constantes `EMAIL_NOTIFICACAO`, `EMAIL_REMETENTE` e `SENHA_REMETENTE` para poder funcionar o envio de e-mails:
 
 ```php
 define('EMAIL_NOTIFICACAO', 'Email que receberá a notificação');
@@ -42,13 +42,13 @@ define('SENHA_REMETENTE', 'Sua senha');
 
 > Arquivo index.php
 
-Antes de testar o funcionamento da aplicação, é necessário alterar o primeiro 'require' do arquivo [index.php](index.php). Mude o valor de '../config.php' ...
+Antes de testar o funcionamento da aplicação, é necessário alterar o primeiro `require` do arquivo [index.php](index.php). Mude o valor de `../config.php` ...
 
 ```php
 require "../config.php";
 ```
 
-... para 'config/config.php'.
+... para `config/config.php`.
 
 ```php
 require "config/config.php";
