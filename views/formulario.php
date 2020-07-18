@@ -22,9 +22,7 @@
                         <div class="form-group">
                             <legend>Descrição (Opcional)</legend>
 
-                            <textarea class="form-control" name="descricao">
-                                <?php echo $tarefa->getDescricao(); ?>
-                            </textarea>
+                            <textarea class="form-control" name="descricao"><?php echo $tarefa->getDescricao(); ?></textarea>
                         </div>
 
                         <div class="form-group">

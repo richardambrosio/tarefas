@@ -16,10 +16,7 @@
             <div class="container-fluid">
                 <p class="lead text-danger">Ops... Parece que não encontramos a página solicitada :(</p>
                 <a class="btn btn-info" href="index.php?rota=tarefas">Ir para a lista de tarefas</a>
-            </div>
-
-
-            
+            </div>  
         </div>
 
         <script src="bibliotecas/bootstrap-4.4.1-dist/css/jquery-3.5.1.min.js"></script>
